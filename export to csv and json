@@ -1,0 +1,106 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title> History </title>
+	
+	
+	</style>
+<body>
+<div class="container">
+<ul>
+
+<ul>
+<button onclick="download('csv')">Download CSV </button>
+<button onclick="download('json')">Download JSON </button>
+
+</body>
+
+<script>
+var data = [
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'},
+{host:'abc', process:'gasdgadg', run:13, state:'inactiv', stage:'valid', time:'12/12/12/1988'}
+
+]
+
+	
+ function download(type) {
+		if(type=='json'){
+			downloadJSON(data);
+		}
+		else {
+			exportCSVFile(data);
+		}
+         
+ };
+ 
+ function downloadJSON(data){
+ var element = document.createElement('a');
+                element.setAttribute('href', 'data:text/json;charset=utf-8,' + JSON.stringify(data));
+                element.setAttribute('download', 'test.json');
+                element.style.display = 'none';
+                document.body.appendChild(element);
+                element.click();
+                document.body.removeChild(element);}
+ 
+ function convertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
+
+            line += array[i][index];
+        }
+
+        str += line + '\r\n';
+    }
+
+    return str;
+}
+function exportCSVFile(items) {
+    /*if (headers) {
+        items.unshift(headers);
+    }*/
+
+    // Convert Object to JSON
+	var fileTitle = 'export';
+    var jsonObject = JSON.stringify(items);
+
+    var csv = convertToCSV(jsonObject);
+
+    var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exportedFilenmae);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
+ 
+	  
+</script>
+</html>
